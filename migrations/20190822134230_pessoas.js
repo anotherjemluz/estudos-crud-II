@@ -3,10 +3,10 @@
 */
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('usuarios', table => {
+  return knex.schema.createTable('pessoas', table => {
     table.increments('id').primary()
     table.string('nome').notNull()
-    table.string('email').notNull().unique()
+    table.string('login').notNull().unique()
     table.string('senha').notNull()
   })
 };

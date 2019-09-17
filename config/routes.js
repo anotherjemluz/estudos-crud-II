@@ -7,6 +7,11 @@
 */
 
 module.exports = app => {
-    app.route('/usuarios')
-        .post(app.api.usuario.salvar)
+    app.route('/pessoas')
+        .post(app.api.pessoa.salvar)
+        .get(app.api.pessoa.visualizar)
+
+    app.route('/pessoas/:id')
+        .put(app.api.pessoa.salvar)
+        .get(app.api.pessoa.visualizarPorId)
 }
