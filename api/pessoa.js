@@ -70,12 +70,12 @@ module.exports = app => {
         pessoa.senha = encryptSenha(pessoa.senha)
         delete pessoa.confirmarSenha
 
-        const pessoaFromDB = await app.db('pessoas').where({ login: pessoa.login }).first()
+        const pessoaFromDB = await app.db('pessoas').where({ id: pessoa.id }).first()
 
         if (pessoaFromDB) {
             app.db('pessoas')
-                .update(pessoa)
-                .where({ login: pessoa.login })
+                .update(pessoa) 
+                .where({ id: pessoa.id })
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(500).send(err))
         } else {

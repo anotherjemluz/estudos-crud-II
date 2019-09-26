@@ -28,17 +28,21 @@
                 a(class="add" title="Add" data-toggle="tooltip" @click='save')
                   <i class="material-icons">&#xE03B;</i>
 
-                a(class="edit" title="Edit" data-toggle="tooltip" @click='save')
+                a(class="edit" title="Edit" data-toggle="tooltip" @click='loadPessoa(pessoa, "save", true)')
                   <i class="material-icons">&#xE254;</i>
-
-                a(class="delete" title="Delete" data-toggle="tooltip" @clicik='remove')
-                  <i class="material-icons">&#xE872;</i>
 
             tr
               td #[button(class="btn btn-info add-new" @click='save') Adicionar ]
               td #[input(class='form-control' v-model='pessoa.nome')]
               td #[input(class='form-control' v-model='pessoa.login' )]
               td #[input(class='form-control' type='password' v-model='pessoa.senha' )]
+
+              td  
+                a(class="edit" title="Edit" data-toggle="tooltip" @click='save')
+                  <i class="material-icons">&#xE254;</i>
+
+                a(class="delete" title="Delete" data-toggle="tooltip" @click='remove')
+                  <i class="material-icons">&#xE872;</i>
 
     
 
@@ -100,10 +104,10 @@ export default {
       console.log('é um ' + this.method + this.edit)
       */
       const method = this.edit ? 'put' : 'post'
-      const login = this.edit ? `/${ this.pessoa.login }` : ''
-      console.log(method + login)
+      const id = this.edit ? `/${ this.pessoa.id }` : ''
+      console.log(method + id)
       console.log(this.pessoa)
-      axios[method](`${baseApiUrl}/pessoas${login}`, this.pessoa)
+      axios[method](`${baseApiUrl}/pessoas${id}`, this.pessoa)
         .then(() => { 
           this.$toasted.global.defaultSucess()
           this.reset()
