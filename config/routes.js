@@ -14,4 +14,5 @@ module.exports = app => {
     app.route('/pessoas/:id')
         .put(app.api.pessoa.salvar)
         .get(app.api.pessoa.visualizarPorId)
+        .delete(app.api.pessoa.excluir)
 }

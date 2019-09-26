@@ -61,8 +61,8 @@ module.exports = app => {
             existsOrError(pessoa.nome, 'Nome não inserido.')
             existsOrError(pessoa.login, 'Login não inserido.')
             existsOrError(pessoa.senha, 'Senha não inserida.')
-            existsOrError(pessoa.confirmarSenha, 'Confirmação de senha inválida.')
-            equalsOrError(pessoa.senha, pessoa.confirmarSenha, 'Senhas não conferem.')
+            // existsOrError(pessoa.confirmarSenha, 'Confirmação de senha inválida.')
+            // equalsOrError(pessoa.senha, pessoa.confirmarSenha, 'Senhas não conferem.')
         } catch (msg) {
             return res.status(400).send(msg)
         }
@@ -106,10 +106,10 @@ module.exports = app => {
         try{
             const rowsDeleted = await 
             app.db('pessoas')
-                .where({ login: req.params.login })
+                .where({ id: req.params.id })
                 .del()
             
-            existsOrError(req.params.login, 'Login do usuário não informado.')
+            existsOrError(req.params.id, 'Id do usuário não informado.')
 
             res.status(204).send()
         } catch (msg) {
