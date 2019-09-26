@@ -96,7 +96,7 @@ module.exports = app => {
     const visualizarPorId = (req, res) => {
         app.db('pessoas')
         .select('id', 'login', 'nome', 'senha')
-        .where({ login: req.params.login })
+        .where({ id: req.params.id })
         .first()
         .then(pessoa => res.json(pessoa))
         .catch(err => res.status(500).send(err))
