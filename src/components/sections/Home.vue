@@ -25,9 +25,6 @@
               td {{ pessoa.senha.slice(0,8)+'...' }}
 
               td
-                a(class="add" title="Add" data-toggle="tooltip" @click='save')
-                  <i class="material-icons">&#xE03B;</i>
-
                 a(class="edit" title="Edit" data-toggle="tooltip" @click='loadPessoa(pessoa, "save", true)')
                   <i class="material-icons">&#xE254;</i>
 
@@ -38,7 +35,7 @@
               td #[input(class='form-control' type='password' v-model='pessoa.senha' )]
 
               td  
-                a(class="edit" title="Edit" data-toggle="tooltip" @click='save')
+                a(class="sucess" title="Sucess" data-toggle="tooltip" @click='save')
                   <i class="material-icons">&#xE254;</i>
 
                 a(class="delete" title="Delete" data-toggle="tooltip" @click='remove')
