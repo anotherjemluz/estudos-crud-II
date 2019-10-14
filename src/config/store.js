@@ -7,7 +7,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isfuncionario: true,
-    user: null,
+    user: {
+      nome: "Meu nome",
+      login: "meu login"
+    },
     produtoId: null
   },
   mutations: {

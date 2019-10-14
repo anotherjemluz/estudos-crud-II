@@ -76,12 +76,12 @@ module.exports = app => {
             app.db('pessoas')
                 .update(pessoa)
                 .where({ id: pessoa.id })
-                .then(_ => res.status(204).send())
+                .then(_ => res.status(204).send('Usuario atualizado.'))
                 .catch(err => res.status(500).send(err))
         } else {
             app.db('pessoas')
                 .insert(pessoa)
-                .then(_ => res.status(204).send())
+                .then(_ => res.status(204).send('Usuário criado com sucesso.'))
                 .catch(err => res.status(500).send(err))
         }
     }
@@ -111,7 +111,7 @@ module.exports = app => {
             
             existsOrError(req.params.id, 'Id do usuário não informado.')
 
-            res.status(204).send()
+            res.status(204).send('Usuário excluído com sucesso.')
         } catch (msg) {
             res.status(400).send(msg)
         }
