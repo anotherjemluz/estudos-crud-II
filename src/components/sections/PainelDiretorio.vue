@@ -41,14 +41,20 @@
 
             a(class="delete" title="Delete" data-toggle="tooltip" @click='removeDiretorio')
               <i class="material-icons">&#xE872;</i>
+
+      Tree(:data='treeData' :options='treeOptions' ref='tree')
+
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Tree from 'liquor-tree'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
 
 export default {
   name: 'PainelDiretorio',
+  components: { Tree},
   data: function() {
     return {
       mode: 'save', 
@@ -56,10 +62,18 @@ export default {
       pessoas: [],
       diretorio: {},
       diretorios: [],
-      edit: false
+      edit: false,
+      treeData: this.getTreeData(),
+      treeOptions: {
+        propertyNames: { 'text': 'name' }
+      }
     }
   },
    methods: {
+    getTreeData() {
+      const url = `${baseApiUrl}/diretorios/tree`
+      return axios.get(url).then(res => res.data)
+    },
     loadPessoa(pessoa, mode = 'save', edit = 'true') {
       this.mode = mode
       this.edit = edit
@@ -147,6 +161,8 @@ body {
   }
 
   .pauta { margin: 20px 20px 20px 20px; }
+
+  .menu a, .menu a:hover { color: black; }
 
   .table-wrapper {
     width: 700px;
