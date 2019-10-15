@@ -1,7 +1,7 @@
 <template lang='pug'>
   div.content
     PainelPessoas.table-wrapper
-    PainelDiretorio.table-wrapper
+    PainelDiretorio
 
 </template>
 

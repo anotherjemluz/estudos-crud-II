@@ -6,13 +6,15 @@
     db - 
 */
 
-const app = require('express')()
+const express = require('express')
+const app = express()
 const consign = require('consign') 
 const db = require('./config/db')
+const path = require('path')
 
 app.db = db
 
-consign()
+consign()   
     .then('./config/middlewares.js')
     .then('./api/validation.js')
     .then('./api')
@@ -22,6 +24,7 @@ consign()
 app.get('/', function (req, res) {
     res.send('uia');
 });
+
 
 app.listen(3000, () => {
     console.log('backend rodando...')

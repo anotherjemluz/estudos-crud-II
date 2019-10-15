@@ -1,5 +1,5 @@
 <template lang='pug'>
-  div.container
+  div.container.table-wrapper#ui
     div
       div.table-title
         div.row
@@ -8,41 +8,36 @@
 
           div.col-sm-4
 
-    table(class="table table-bordered")
-      thead
-        tr
-          th Usuários
-          th Diretórios
-          th Arquivos
-
-      tbody
-        tr
-          td
-            ul(v-for="pessoa in pessoas")
-              li.pauta #[a {{ pessoa.login }}]
-          
-          td
-            ul(v-for="diretorio in diretorios")
-              li #[a  {{ diretorio.nome }}]
-          //- div bb 
+    div.row
+      div.col-sm-2.usuarios-div
+        p Usuários
+        add(v-for="pessoa in pessoas")
+          li.pauta #[a - {{ pessoa.login }}]
+      
+      div.col-sm-2.diretorios-div
+        p Diretórios
+        Tree(:data='treeData' :options='treeOptions' ref='tree' style='color: black;' class='col-sm-12')
+    
+      div.col-sm-6.arquivos-div
+        p Arquivos {{ diretorio.path }}
+        a(src='/uploads/img-1571142770329.png' download) /uploads/img-1571142770329.png
         
-          td
-            //- ul(v-for="diretorio in diretorios")
-            //-     li #[a  {{ diretorio.nome }}]
 
-        tr  
-          td #[button(class="btn btn-info add-new" @click='saveDiretorio') Adicionar ]
-          td #[input(class='form-control' v-model='diretorio.nome')]
-          td #[input(class='form-control' v-model='diretorio.parentId' )]
+    div.row
+      div.col-sm-1 #[button(class="btn btn-info add-new" @click='saveDiretorio') Adicionar ]
+      div.col-sm-2 #[input(class='form-control' placeholder='Nome do Diretorio' v-model='diretorio.nome')]
+      div.col-sm-2 #[input(class='form-control' placeholder='Diretorio Pai (opcional)' v-model='diretorio.parentId' )]
 
-          td  
-            a(class="sucess" title="Sucess" data-toggle="tooltip" @click='saveDiretorio')
-              <i class="material-icons">&#xE254;</i>
+      div.col-sm-1
+        a(class="sucess" title="Sucess" data-toggle="tooltip" @click='saveDiretorio')
+          <i class="material-icons">&#xE254;</i>
 
-            a(class="delete" title="Delete" data-toggle="tooltip" @click='removeDiretorio')
-              <i class="material-icons">&#xE872;</i>
+        a(class="delete" title="Delete" data-toggle="tooltip" @click='removeDiretorio')
+          <i class="material-icons">&#xE872;</i>
 
-      Tree(:data='treeData' :options='treeOptions' ref='tree')
+      Upload
+
+      
 
 </template>
 
@@ -51,10 +46,11 @@ import { mapState } from 'vuex'
 import Tree from 'liquor-tree'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
+import Upload from './Upload'
 
 export default {
   name: 'PainelDiretorio',
-  components: { Tree},
+  components: { Tree, Upload },
   data: function() {
     return {
       mode: 'save', 
@@ -65,7 +61,7 @@ export default {
       edit: false,
       treeData: this.getTreeData(),
       treeOptions: {
-        propertyNames: { 'text': 'name' }
+        propertyNames: { 'text': 'nome' }
       }
     }
   },
@@ -73,6 +69,12 @@ export default {
     getTreeData() {
       const url = `${baseApiUrl}/diretorios/tree`
       return axios.get(url).then(res => res.data)
+    },
+    onNodeSelect(node) {
+      this.$router.push({
+        name: 'arquivosPorDiretorio',
+        params: { id: node.id }
+      })
     },
     loadPessoa(pessoa, mode = 'save', edit = 'true') {
       this.mode = mode
@@ -133,7 +135,6 @@ export default {
         })
         .catch(showError)
       this.add = false
-      this.loadAllData()
     },
     removeDiretorio() {
       // é uma função mais simples que o save(), que faz uma requisição axios do tipo delete passando a url com o id
@@ -146,9 +147,21 @@ export default {
         .catch(showError)
     }
   },
+  watch: {
+    $route(to) {
+      this.diretorio.id = to.params.id
+      this.arquivos = []
+      this.page = 1
+      this.loadMore = true
+
+      this.getCategory()
+      this.getArquivos()
+    }
+  },
   mounted() {
     // executado após o carregamento do componente
     this.loadAllData()
+    this.$refs.tree.$on('node:selected', this.onNodeSelect)
   }
 };
 </script>
@@ -159,11 +172,6 @@ body {
     background: #F5F7FA;
     font-family: 'Open Sans', sans-serif;
   }
-
-  .pauta { margin: 20px 20px 20px 20px; }
-
-  .menu a, .menu a:hover { color: black; }
-
   .table-wrapper {
     width: 700px;
     margin: 30px auto;
@@ -260,4 +268,17 @@ body {
   table.table td .add {
     display: none;
   }
+
+  .pauta { margin: 20px 20px 20px 20px; list-style-type: none; }
+
+  div .tree-node { color: black; background-color: transparent;}
+
+  #ui { width: 80vw; }
+
+  .usuarios-div, .diretorios-div, .arquivos-div { min-height: 300px; }
+  .usuarios-div > p, .diretorios-div > p, .arquivos-div > p { border-bottom: 1px solid  gray; }
+
+  .usuarios-div { padding: 20px; margin: 20px; }
+  .diretorios-div { padding: 20px; margin: 20px; }
+  .arquivos-div {  padding: 20px; margin: 20px; }
 </style>
